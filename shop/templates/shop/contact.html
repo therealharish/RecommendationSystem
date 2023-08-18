@@ -1,0 +1,36 @@
+{% extends 'shop/basic.html' %}
+{% block title %} contact us - shoppie {% endblock %}
+{% block body %}
+<form class="mx-4 my-4" action="/shop/contact/" method="post">{% csrf_token %}
+    <h1>Contact Us!</h1>
+    <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="enter name">
+  </div>
+  <div class="form-group">
+    <label for="mail">Email address</label>
+    <input type="email" class="form-control" id="mail" name="mail" placeholder="enter e-mail">
+  </div>
+    <div class="form-group">
+    <label for="address">Address</label>
+    <input type="text" class="form-control" id="address" name="address" placeholder="enter address">
+  </div>
+    <div class="form-group">
+    <label for="phno">Phone No.</label>
+    <input type="tel" class="form-control" id="phno" name="phno" placeholder="enter phone number">
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    {% if thank %}
+    alert('Thank You for contacting us, We will get in touch with you soon.')
+    document.location="/shop";
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'shop/basic.html' %}
+{% block title %} SignUp page {% endblock %}
+{% block body %}
+<div class="container home-content">
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <h3>SignUp Page</h3>
+    <div class="card shadow p-4">
+        <form action="" method="post">{% csrf_token %}
+            <input type="text" name="username" class="form-control my-2" placeholder="Username">
+            <input type="email" name="email" class="form-control my-2" placeholder="E-mail">
+            <input type="password" name="password" class="form-control my-2" placeholder="Password">
+            <input type="password" name="password2" class="form-control my-2" placeholder="Confirm Password">
+
+            <button type="submit" class="btn btn-primary mt-1">SignUp</button>&nbsp;<button type="reset" class="btn btn-primary mt-1">Reset form</button>
+        </form>
+    </div>
+    <div class="text-center my-4">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Login Page {% endblock %}
+{% block body %}
+<div class="container home-content">
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <h3>Login Page</h3>
+    <div class="card shadow p-4">
+        <form action="" method="post">{% csrf_token %}
+            <input type="text" name="username" class="form-control my-2" placeholder="Username">
+            <input type="password" name="password" class="form-control my-2" placeholder="Password">
+            <button type="submit" class="btn btn-primary mt-1">Login</button>
+        </form>
+    </div>
+
+    <div class="text-center mt-4">
+         <a href="">Forgot Password?</a>
+    </div>
+    <div class="text-center my-2">
+        Create a new account? <a href="{% url 'register' %}">Register</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
