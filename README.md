@@ -17,16 +17,10 @@ This enables the user to view the freshly recommended products each time they pe
 
 ## Command to create and run this project
 
-### create a django project first
+### clone the repository
 
 ```
-django-admin startproject <project_name>
-```
-
-### create a django app
-
-```
-python manage.py startapp <app_name>
+git clone https://github.com/therealharish/RecommendationSystem
 ```
 
 The data set is provided at: [Images Data set](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small?select=images)
