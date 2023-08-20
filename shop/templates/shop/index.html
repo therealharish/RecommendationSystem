@@ -39,11 +39,11 @@ padding-right:0
 <div class="container" xmlns="http://www.w3.org/1999/html">
 	{% for product,range,nslides,cat in allProds %}
 	<h1 class="my-4">{{cat}}</h1>
-	{% if cat == 'Recommended products' and product|length == 0 %}
+	{% if cat == 'Recommended Products' and product|length == 0 %}
 	<div class="card-body">
-		<h5 class="card-title" id="namepr{{i.product_id}}">Nothing to recommed right now. Grab some products first!</h5>
+		<h5 class="card-title" id="namepr{{i.product_id}}">Nothing to recommend right now. Grab some products first!</h5>
 	</div>
-	{% endif %}
+	{% else %}
 	<div class="row">
 		<div id="demo{{forloop.counter}}" class="col carousel slide my-3" data-ride="carousel">
 			<ul class="carousel-indicators">
@@ -67,26 +67,27 @@ padding-right:0
 									<button id="pr{{i.product_id}}" class="btn btn-primary cart">Add To Cart</button>
 								</span>
 								<a href="/shop/products/{{i.product_id}}"> <button id="qv{{i.product_id}}"
-										class="btn btn-primary cart">Quick
-										View</button></a>
+									class="btn btn-primary cart">Quick
+									View</button></a>
+								</div>
 							</div>
 						</div>
+						{% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
 					</div>
-					{% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
-				</div>
-				<div class="carousel-item">
-					{% endif %}
-					{% endfor %}
+					<div class="carousel-item">
+						{% endif %}
+						{% endfor %}
+					</div>
 				</div>
 			</div>
-		</div>
-		<a class="carousel-control-prev" href="#demo{{forloop.counter}}" data-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		</a>
-		<a class="carousel-control-next" href="#demo{{forloop.counter}}" data-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-		</a>
+			<a class="carousel-control-prev" href="#demo{{forloop.counter}}" data-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			</a>
+			<a class="carousel-control-next" href="#demo{{forloop.counter}}" data-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			</a>
 	</div>
+	{% endif %}
 	{% endfor %}
 </div>
 {% endblock %}

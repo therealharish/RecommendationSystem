@@ -55,10 +55,14 @@ import swifter
 import warnings
  
 import os
+
+initial_datetime = datetime.datetime.now().timestamp()
+
  
  
 DATASET_PATH= os.getcwd() + "\\media\\"
  
+
  
  
  
@@ -186,7 +190,7 @@ def vector_extraction(resnetmodel, image_id):
     except FileNotFoundError:
         # Store the index of such entries in missing_img list and drop them later
         missed_img = df[df['image']==image_id].index
-        print(missed_img)
+        # print(missed_img)
         missing_img.append(missed_img)
  
 # importing the embeddings  
@@ -237,8 +241,8 @@ def recomend_images(ImId, top_n = 6):
 def recm_user_input(image_id):
     
     # Exception to handle missing images 
-    
-    img = Image.open(DATASET_PATH + "\\images\\" +image_id).convert('RGB')
+    # print("\n\n\n\nImage ID: ", image_id, "\n\n\n\n")
+    img = Image.open(DATASET_PATH + "images\\" +image_id).convert('RGB')
     # print(type(img))
         
     t_img = Variable(standardize(convert_tensor(s_data(img))).unsqueeze(0))
@@ -329,12 +333,12 @@ def index(request):
     recommend_list=deque([])
     for pp in prev_products:
         recommend_list.extend(recm_user_input(f'{pp.prod}.jpg'))
-    print(recommend_list)
+    # print(recommend_list)
     recomm_prod_list=[]
     for p in recommend_list:
         pid=p[:-4]
         recomm_prod_list.append(Product.objects.get(product_id=pid))
-    recomm_prod_list.pop(0)
+    if recomm_prod_list: recomm_prod_list.pop(0)
     n=len(recomm_prod_list)
     nslides = n // 4 - math.ceil((n / 4) - (n // 4))
     allProds.append([recomm_prod_list, range(1, nslides), nslides, 'Recommended Products'])
@@ -486,7 +490,7 @@ def prodview(request, myid):
     # print(product)
     user=request.user
     upf=UserProductFreq.objects.get_or_create(user=user, prod=product)
-    upf[0].freq+=1
+    upf[0].freq+=1*(int(datetime.datetime.now().timestamp()) - initial_datetime)
     upf[0].save()
     allProds = []
     recommend_list=deque([])
@@ -496,7 +500,7 @@ def prodview(request, myid):
     for p in recommend_list:
         pid=p[:-4]
         recomm_prod_list.append(Product.objects.get(product_id=pid))
-    recomm_prod_list.pop(0)
+    if recomm_prod_list: recomm_prod_list.pop(0)
     n=len(recomm_prod_list)
     nslides = n // 4 - math.ceil((n / 4) - (n // 4))
     allProds.append([recomm_prod_list, range(1, nslides), nslides, 'Similar Products'])
@@ -523,7 +527,7 @@ def checkout(request):
         update.save()
         for prodid in json_object:
             upf=UserProductFreq.objects.get_or_create(user=user, prod=Product.objects.get(product_id=prodid[2:]))
-            upf[0].freq+=5
+            upf[0].freq+=5 * (int(datetime.datetime.now().timestamp()) - initial_datetime)
             upf[0].save()
         thank = True
         id = order.order_id
