@@ -34,6 +34,7 @@ pip install -r requirements.txt
 ```
 
 The data set is provided at: [Images Data set](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small?select=images)
+Create a media directory under the ROOT directory
 Download the images data set and move the data set to _media_ directory.
 
 ### run migration to register models in admin
