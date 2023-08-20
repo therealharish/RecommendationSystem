@@ -23,6 +23,16 @@ This enables the user to view the freshly recommended products each time they pe
 git clone https://github.com/therealharish/RecommendationSystem
 ```
 
+### mave to project directory
+```
+cd RecommendationSystem
+```
+
+### install requirements specified in _requirements.txt_
+```
+pip install -r requirements.txt
+```
+
 The data set is provided at: [Images Data set](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small?select=images)
 
 ### run migration to register models in admin
