@@ -2,3 +2,6 @@ media
 Dataset
 images
 db.sqlite3
+df_embs.csv
+styles.csv
+df_embs.pkl
