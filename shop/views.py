@@ -14,41 +14,29 @@ import numpy as np
 from tqdm import tqdm
 import pathlib 
 import os
-# Importing matplotlib for plotting
 import matplotlib.pyplot as plt 
-#set style
 plt.style.use('ggplot')
- 
-# Importing numpy for numerical operations
- 
-# Importing pandas for preprocessing
+
 import pandas as pd 
  
-# Importing joblib to dump and load embeddings df
 import joblib
  
  
-# Importing cv2 to read images
 import cv2
  
-# Importing cosine_similarity to find similarity between images
 from sklearn.metrics.pairwise import cosine_similarity
  
-# Importing flatten from pandas to flatten 2-D array
 from pandas.core.common import flatten
  
-# Importing the below libraries for our model building
  
-#import torch
+
 import torch
 import torch.nn as nn
  
-#import cv models
 import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.autograd import Variable
  
-#import image
 from PIL import Image
  
 import swifter
@@ -62,22 +50,12 @@ initial_datetime = datetime.datetime.now().timestamp()
  
 DATASET_PATH= os.getcwd() + "\\media\\"
  
-
- 
- 
- 
-'''
- 
-RECOMMENDATION SYSTEM
- 
-'''
- 
  
 df = pd.read_csv(DATASET_PATH + 'styles.csv', on_bad_lines='skip')
  
 def get_all_filenames(directory):
     """
-    Returns a set of all filenames in the given directory.
+    a list of all filenames in the specified directory is returned.
     """
     filenames = {entry.name for entry in os.scandir(directory) if entry.is_file()}
     return filenames
@@ -86,8 +64,7 @@ images = get_all_filenames(DATASET_PATH + "images/")
  
 def check_image_exists(image_filename):
     """
-    Checks if the desired filename exists within the filenames found in the given directory.
-    Returns True if the filename exists, False otherwise.
+    determines if the requested filename is present among the filenames in the specified directory. Returns False if the file doesn't exist; true if it does.
     """
     global images
     if image_filename in images:
@@ -113,7 +90,7 @@ def plot_figures(figures, nrows = 1, ncols=1,figsize=(8, 8)):
         axeslist.ravel()[ind].imshow(cv2.cvtColor(figures[title], cv2.COLOR_BGR2RGB))
         axeslist.ravel()[ind].set_title(title)
         axeslist.ravel()[ind].set_axis_off()
-    plt.tight_layout() # optional
+    plt.tight_layout()
     
 #image path 
 def image_location(img):
@@ -125,10 +102,13 @@ def import_img(image):
     return image
  
 #ResNet18 PyTorch model to convert
- 
-# We will use resent architecture for our work as the name suggest it has 18 layers altogether ith layers of convolution in it
-# It has been trained on million of images that are extracted from imagenet dataset it has capacity to classify over 1000 class objects
-# Defining the input shape
+
+'''
+As the name implies, we will employ the current architecture, which has 18 layers overall and levels of convolution.
+It has the ability to categorize over 1000 different types of objects because it was trained on millions of photos from the ImageNet dataset.
+the input shape being defined
+'''
+
  
 width= 224
 height= 224
@@ -188,7 +168,7 @@ def vector_extraction(resnetmodel, image_id):
     
     # If file not found
     except FileNotFoundError:
-        # Store the index of such entries in missing_img list and drop them later
+        # Keep track of the index for such items in the missing_img list, then delete them.
         missed_img = df[df['image']==image_id].index
         # print(missed_img)
         missing_img.append(missed_img)
@@ -204,10 +184,10 @@ joblib.dump(df_embs, DATASET_PATH + 'df_embs.pkl', 9)
 #importing the pkl
 df_embs = joblib.load(DATASET_PATH + 'df_embs.pkl')
  
-# Calculating similarity between images ( using embedding values )
+# Comparing photos for similarity (using embedding values)
 cosine_sim = cosine_similarity(df_embs) 
  
-# Previewing first 4 rows and 4 columns similarity just to check the structure of cosine_sim
+# just checking the structure of cosine_sim by previewing the first four rows and four columns of similarity
 cosine_sim[:4, :4]
  
 # Storing the index values in a series index_vales for recommending
@@ -262,7 +242,6 @@ def recm_user_input(image_id):
     cs_df = cs_df.sort_values(by=['Score'],ascending=False)
         
 # Printing Cosine Similarity
-    # print(cs_df['Score'][:10])
     # Extracting the index of top 10 similar items/images
     top10 = cs_df[:10].index
     top10 = list(flatten(top10))
@@ -271,14 +250,7 @@ def recm_user_input(image_id):
         image_id = df[df.index==i]['image']
         # print(image_id)
         images_list.append(image_id)
-    images_list = list(flatten(images_list))
-    # print(images_list)
-    
-    # Plotting the image of item requested by user
-    # print("Hi",image_id)
-    #img_print =Image.open('../input/afsfssgg/'+image_id)
-    #print(img_print)
-    #plt.imshow(img_print)
+    images_list = list(flatten(images_list))    
 # Generating a dictionary { index, image }
     figures = {'im'+str(i): Image.open(DATASET_PATH + "\\images\\"  + i) for i in images_list}
     fig, axes = plt.subplots(2, 5, figsize = (8,8) )
@@ -292,37 +264,6 @@ def recm_user_input(image_id):
     figures = {'im'+str(i):import_img(row.image) for i, row in df.sample(6).iterrows()}
     return images_list
  
-# Sample given below
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
-'''
- 
-RECOMMENDATION SYSTEM
- 
- 
-'''
- 
- 
- 
  
  
 # Create your views here.
@@ -333,7 +274,6 @@ def index(request):
     recommend_list=deque([])
     for pp in prev_products:
         recommend_list.extend(recm_user_input(f'{pp.prod}.jpg'))
-    # print(recommend_list)
     recomm_prod_list=[]
     for p in recommend_list:
         pid=p[:-4]
@@ -345,23 +285,14 @@ def index(request):
 
     user=request.user
     catprods = Product.objects.values('master_category', 'product_id')
-    # print(catprods)
     cats = {item['master_category'] for item in catprods}
-    # print(Product.objects.filter(product_id='11163'))
  
     for cat in cats:
         prod = Product.objects.filter(master_category=cat)[:25]
-        # print(prod)
         n = len(prod)
         nslides = n // 4 - math.ceil((n / 4) - (n // 4))
         allProds.append([prod, range(1, nslides), nslides, cat])
-    #     break
-    # # id_categoty_map={11: 'Electronic', 12: 'Clothing', 13: 'Crockery', 14: 'Toys', 15: 'Grocery', 16: 'Furniture', 17: 'Jewellery'}
     params = {'allProds': allProds,'user':user}
-    # print(params)
- 
-    # print(recomend_images(3810, top_n = 5))
-    # print("Recommendations: ", recm_user_input('1163.jpg'), "\n")
     return render(request, 'shop/index.html', params)
  
 
@@ -417,24 +348,7 @@ def custom_logout(request):
     return redirect('login')
 
 
-# def about(request):
-#     return render(request, 'shop/about.html')
-#
-#
-# def contact(request):
-#     thank = False
-#     if request.method == 'POST':
-#         name = request.POST.get('name', '')
-#         mail = request.POST.get('mail', '')
-#         address = request.POST.get('address', '')
-#         phno = request.POST.get('phno', '')
-#         con = Contact(name=name, mail=mail, address=address, phno=phno)
-#         con.save()
-#         thank = True
-#         return render(request, 'shop/contact.html', {'thank': thank})
-#     return render(request, 'shop/contact.html')
-#
-#
+
 def tracker(request):
     if request.method == 'POST':
         orderid = request.POST.get('orderid', '')
@@ -458,36 +372,9 @@ def tracker(request):
             return HttpResponse('{"status":"error"}')
     return render(request, 'shop/tracker.html')
 
-#
-# def searchmatch(query, item):
-#     if query.lower() in item.desc.lower() or query in item.product_name.lower() or query in item.category.lower():
-#         return True
-#     else:
-#         return False
-#
-#
-# def search(request):
-#     query = request.GET.get('search')
-#     allProds = []
-#     catprods = Product.objects.values('category', 'id')
-#     cats = {item['category'] for item in catprods}
-#     for cat in cats:
-#         prodtemp = Product.objects.filter(category=cat)
-#         prod = [item for item in prodtemp if searchmatch(query, item)]
-#         n = len(prod)
-#         nslides = n // 4 - math.ceil((n / 4) - (n // 4))
-#         if len(prod)!=0:
-#             allProds.append([prod, range(1, nslides), nslides])
-#     params = {'allProds': allProds,'msg':''}
-#     if len(allProds)==0 or len(query)<3:
-#         params={'msg':'Seems like we are unable to comprehend what you searched for. Please make sure you enter a relevant thing'}
-#     return render(request, 'shop/search.html', params)
-#
-
 
 def prodview(request, myid):
     product = Product.objects.get(product_id=myid)
-    # print(product)
     user=request.user
     upf=UserProductFreq.objects.get_or_create(user=user, prod=product)
     upf[0].freq+=1*(int(datetime.datetime.now().timestamp()) - initial_datetime)
@@ -521,7 +408,6 @@ def checkout(request):
         phone = request.POST.get('phone', '')
         order = Order(items_json=items_json, user=user, address=address, phone=phone, city=city, state=state, pin=pin, amount=amount)
         json_object = json.loads(items_json)
-        # print(json_object,type(json_object))
         order.save()
         update = OrderUpdate(order_id=order, update_desc='The order has been placed.')
         update.save()
