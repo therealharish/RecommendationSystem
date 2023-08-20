@@ -23,7 +23,7 @@ This enables the user to view the freshly recommended products each time they pe
 git clone https://github.com/therealharish/RecommendationSystem
 ```
 
-### mave to project directory
+### move to project directory
 ```
 cd RecommendationSystem
 ```
