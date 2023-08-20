@@ -34,6 +34,7 @@ pip install -r requirements.txt
 ```
 
 The data set is provided at: [Images Data set](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small?select=images)
+Download the images data set and move the data set to _media_ directory.
 
 ### run migration to register models in admin
 ```
@@ -55,6 +56,8 @@ python manage.py runserver
 ```
 python manage.py createsuperuser
 ```
+
+
 
 
 
