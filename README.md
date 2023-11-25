@@ -4,7 +4,7 @@
 
 ### Tech-Stack used:
 * Python
-Django Framework
+* Django Framework
 * HTML, CSS, JavaScript, and Bootstrap
 * ResNet model (machine learning component for recommendation algorithm)
 
